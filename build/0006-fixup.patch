@@ -1,0 +1,25 @@
+From f0d707714f3ae6ebec1fc601baae862f008cbb0c Mon Sep 17 00:00:00 2001
+From: tmak2002 <tmak2002@mailbox.org>
+Date: Wed, 12 Oct 2022 17:37:39 +0000
+Subject: [PATCH 6/6] fixup!
+
+Change-Id: Ia284e137dc355585e11c3718f910e041019fc159
+---
+ target/product/handheld_product.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/target/product/handheld_product.mk b/target/product/handheld_product.mk
+index 28be7911f..67a719953 100644
+--- a/target/product/handheld_product.mk
++++ b/target/product/handheld_product.mk
+@@ -21,6 +21,7 @@
+ $(call inherit-product, $(SRC_TARGET_DIR)/product/media_product.mk)
+ 
+ # /product packages
++PRODUCT_PACKAGES += \
+     Camera \
+     Contacts \
+     DeskClock \
+-- 
+2.34.1
+

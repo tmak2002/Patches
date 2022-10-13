@@ -1,0 +1,29 @@
+From 6b4012b6ab8f3691cb5e49120adc08cfd907bd44 Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Thu, 15 Dec 2016 03:37:17 -0500
+Subject: [PATCH 2/3] hide unsupported gesture settings
+
+---
+ java/res/xml/prefs.xml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/java/res/xml/prefs.xml b/java/res/xml/prefs.xml
+index f01909f37..55b9b102e 100644
+--- a/java/res/xml/prefs.xml
++++ b/java/res/xml/prefs.xml
+@@ -30,10 +30,12 @@
+         android:fragment="com.android.inputmethod.latin.settings.AppearanceSettingsFragment"
+         android:title="@string/settings_screen_appearance"
+         android:key="screen_appearance" />
++    <!-- Requires a missing proprietary Google library
+     <PreferenceScreen
+         android:fragment="com.android.inputmethod.latin.settings.GestureSettingsFragment"
+         android:title="@string/settings_screen_gesture"
+         android:key="screen_gesture" />
++    -->
+     <PreferenceScreen
+         android:fragment="com.android.inputmethod.latin.settings.CorrectionSettingsFragment"
+         android:title="@string/settings_screen_correction"
+-- 
+2.34.1
+

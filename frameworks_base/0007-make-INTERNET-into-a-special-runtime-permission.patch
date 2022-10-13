@@ -1,0 +1,99 @@
+From 303f69a332c246bdd51ec67d8e60c353a58af66c Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Sun, 17 Mar 2019 11:59:15 -0400
+Subject: [PATCH 07/12] make INTERNET into a special runtime permission
+
+Ported from 10: 5e2898e9d21dd6802bb0b0139e7e496c41e1cd80
+
+Squashed with:
+
+commit 45d9ff6c7c6c596c6e46dbcae4ac75862ba213e0
+Author: Daniel Micay <danielmicay@gmail.com>
+Date:   Fri Jul 21 11:23:07 2017 -0400
+
+    add a NETWORK permission group for INTERNET
+
+    Ported from 10: b5c9f9407d5f5407686ea8c02fa67573ddc07824
+
+    Changes from 10:
+    - Needed to run `m api-stubs-docs-non-updatable-update-current-api`
+    to fix the "You have tried to change the API from what has been
+    previously approved" errors.
+---
+ core/api/current.txt                                   |  1 +
+ core/res/AndroidManifest.xml                           | 10 +++++++++-
+ core/res/res/values/strings.xml                        |  5 +++++
+ .../server/pm/permission/PermissionManagerService.java |  2 +-
+ 4 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/core/api/current.txt b/core/api/current.txt
+index ada2c59ff24c..5411ba5916c1 100644
+--- a/core/api/current.txt
++++ b/core/api/current.txt
+@@ -205,6 +205,7 @@ package android {
+     field public static final String LOCATION = "android.permission-group.LOCATION";
+     field public static final String MICROPHONE = "android.permission-group.MICROPHONE";
+     field public static final String NEARBY_DEVICES = "android.permission-group.NEARBY_DEVICES";
++    field public static final String NETWORK = "android.permission-group.NETWORK";
+     field public static final String PHONE = "android.permission-group.PHONE";
+     field public static final String SENSORS = "android.permission-group.SENSORS";
+     field public static final String SMS = "android.permission-group.SMS";
+diff --git a/core/res/AndroidManifest.xml b/core/res/AndroidManifest.xml
+index 2a7442e2be23..9994c1c8ebdb 100644
+--- a/core/res/AndroidManifest.xml
++++ b/core/res/AndroidManifest.xml
+@@ -1724,13 +1724,21 @@
+     <!-- ======================================= -->
+     <eat-comment />
+ 
++    <!-- Network access -->
++    <permission-group android:name="android.permission-group.NETWORK"
++        android:icon="@drawable/perm_group_network"
++        android:label="@string/permgrouplab_network"
++        android:description="@string/permgroupdesc_network"
++        android:priority="900" />
++
+     <!-- Allows applications to open network sockets.
+          <p>Protection level: normal
+     -->
+     <permission android:name="android.permission.INTERNET"
++        android:permissionGroup="android.permission-group.UNDEFINED"
+         android:description="@string/permdesc_createNetworkSockets"
+         android:label="@string/permlab_createNetworkSockets"
+-        android:protectionLevel="normal|instant" />
++        android:protectionLevel="dangerous|instant" />
+ 
+     <!-- Allows applications to access information about networks.
+          <p>Protection level: normal
+diff --git a/core/res/res/values/strings.xml b/core/res/res/values/strings.xml
+index 4a58a52388fb..82437f0c4996 100644
+--- a/core/res/res/values/strings.xml
++++ b/core/res/res/values/strings.xml
+@@ -837,6 +837,11 @@
+     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+     <string name="permgroupdesc_sensors">access sensor data about your vital signs</string>
+ 
++    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
++    <string name="permgrouplab_network">Network</string>
++    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
++    <string name="permgroupdesc_network">access the network</string>
++
+     <!-- Title for the capability of an accessibility service to retrieve window content. -->
+     <string name="capability_title_canRetrieveWindowContent">Retrieve window content</string>
+     <!-- Description for the capability of an accessibility service to retrieve window content. -->
+diff --git a/services/core/java/com/android/server/pm/permission/PermissionManagerService.java b/services/core/java/com/android/server/pm/permission/PermissionManagerService.java
+index 741718a07127..0241f4e81d3b 100644
+--- a/services/core/java/com/android/server/pm/permission/PermissionManagerService.java
++++ b/services/core/java/com/android/server/pm/permission/PermissionManagerService.java
+@@ -2592,7 +2592,7 @@ public class PermissionManagerService extends IPermissionManager.Stub {
+     }
+ 
+     public static boolean isSpecialRuntimePermission(final String permission) {
+-        return false;
++        return Manifest.permission.INTERNET.equals(permission);
+     }
+ 
+     /**
+-- 
+2.34.1
+

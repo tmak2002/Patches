@@ -1,0 +1,39 @@
+From 0f7ecf15c110061e734a9ee3d6dbe7cceeb82d98 Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Mon, 2 Jan 2017 16:20:43 -0500
+Subject: [PATCH 3/3] consistently disable keypress sound by default
+
+---
+ java/res/values-sw600dp/config-per-form-factor.xml | 2 +-
+ java/res/values-sw768dp/config-per-form-factor.xml | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/java/res/values-sw600dp/config-per-form-factor.xml b/java/res/values-sw600dp/config-per-form-factor.xml
+index aa9a05482..bb2eaa85f 100644
+--- a/java/res/values-sw600dp/config-per-form-factor.xml
++++ b/java/res/values-sw600dp/config-per-form-factor.xml
+@@ -23,7 +23,7 @@
+     <bool name="config_enable_show_key_preview_popup_option">false</bool>
+     <!-- Whether or not Popup on key press is enabled by default -->
+     <bool name="config_default_key_preview_popup">false</bool>
+-    <bool name="config_default_sound_enabled">true</bool>
++    <bool name="config_default_sound_enabled">false</bool>
+     <bool name="config_enable_show_voice_key_option">false</bool>
+     <bool name="config_key_selection_by_dragging_finger">false</bool>
+     <!-- Showing more keys keyboard, just above the touched point if true, aligned to the key if
+diff --git a/java/res/values-sw768dp/config-per-form-factor.xml b/java/res/values-sw768dp/config-per-form-factor.xml
+index b90fbaea5..45ff0b1ff 100644
+--- a/java/res/values-sw768dp/config-per-form-factor.xml
++++ b/java/res/values-sw768dp/config-per-form-factor.xml
+@@ -23,7 +23,7 @@
+     <bool name="config_enable_show_key_preview_popup_option">false</bool>
+     <!-- Whether or not Popup on key press is enabled by default -->
+     <bool name="config_default_key_preview_popup">false</bool>
+-    <bool name="config_default_sound_enabled">true</bool>
++    <bool name="config_default_sound_enabled">false</bool>
+     <bool name="config_enable_show_voice_key_option">false</bool>
+     <bool name="config_key_selection_by_dragging_finger">false</bool>
+     <!-- Showing more keys keyboard, just above the touched point if true, aligned to the key if
+-- 
+2.34.1
+

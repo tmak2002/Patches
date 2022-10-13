@@ -1,0 +1,23 @@
+From d19490a82e3fad79643d5148b97c0075f444fcb9 Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Mon, 17 Feb 2020 04:23:07 -0500
+Subject: [PATCH 3/6] replace webview with TrichromeWebView
+
+Signed-off-by: anupritaisno1 <www.anuprita804@gmail.com>
+---
+ target/product/media_product.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/target/product/media_product.mk b/target/product/media_product.mk
+index 76cb311b6..74dd1fe01 100644
+--- a/target/product/media_product.mk
++++ b/target/product/media_product.mk
+@@ -22,4 +22,4 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/base_product.mk)
+ 
+ # /product packages
+ PRODUCT_PACKAGES += \
+-    webview \
++    TrichromeWebView \
+-- 
+2.34.1
+

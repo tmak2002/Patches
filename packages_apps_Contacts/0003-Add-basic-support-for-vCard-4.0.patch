@@ -1,0 +1,163 @@
+From 126dcec745fb68c87e312861cf5271a70ffcbca9 Mon Sep 17 00:00:00 2001
+From: June <june@eridan.me>
+Date: Sat, 19 Feb 2022 06:53:03 +0000
+Subject: [PATCH 3/3] Add basic support for vCard 4.0
+
+Signed-off-by: June <june@eridan.me>
+---
+ .../contacts/vcard/ImportProcessor.java       | 14 +++++---
+ .../contacts/vcard/ImportVCardActivity.java   | 34 +++++++++++++++++--
+ .../vcard/NfcImportVCardActivity.java         | 18 ++++++++--
+ 3 files changed, 57 insertions(+), 9 deletions(-)
+
+diff --git a/src/com/android/contacts/vcard/ImportProcessor.java b/src/com/android/contacts/vcard/ImportProcessor.java
+index c6fcccb8c..8eff2cc96 100644
+--- a/src/com/android/contacts/vcard/ImportProcessor.java
++++ b/src/com/android/contacts/vcard/ImportProcessor.java
+@@ -30,6 +30,7 @@ import com.android.vcard.VCardInterpreter;
+ import com.android.vcard.VCardParser;
+ import com.android.vcard.VCardParser_V21;
+ import com.android.vcard.VCardParser_V30;
++import com.android.vcard.VCardParser_V40;
+ import com.android.vcard.exception.VCardException;
+ import com.android.vcard.exception.VCardNotSupportedException;
+ import com.android.vcard.exception.VCardVersionException;
+@@ -135,7 +136,8 @@ public class ImportProcessor extends ProcessorBase implements VCardEntryHandler
+              */
+             possibleVCardVersions = new int[] {
+                     ImportVCardActivity.VCARD_VERSION_V21,
+-                    ImportVCardActivity.VCARD_VERSION_V30
++                    ImportVCardActivity.VCARD_VERSION_V30,
++                    ImportVCardActivity.VCARD_VERSION_V40
+             };
+         } else {
+             possibleVCardVersions = new int[] {
+@@ -231,9 +233,13 @@ public class ImportProcessor extends ProcessorBase implements VCardEntryHandler
+                 // In the worst case, a user may call cancel() just before creating
+                 // mVCardParser.
+                 synchronized (this) {
+-                    mVCardParser = (vcardVersion == ImportVCardActivity.VCARD_VERSION_V30 ?
+-                            new VCardParser_V30(vcardType) :
+-                                new VCardParser_V21(vcardType));
++                    if (vcardVersion == ImportVCardActivity.VCARD_VERSION_V30) {
++                        mVCardParser = new VCardParser_V30(vcardType);
++                    } else if (vcardVersion == ImportVCardActivity.VCARD_VERSION_V40) {
++                        mVCardParser = new VCardParser_V40(vcardType);
++                    } else {
++                        mVCardParser = new VCardParser_V21(vcardType);
++                    }
+                     if (isCancelled()) {
+                         Log.i(LOG_TAG, "ImportProcessor already recieves cancel request, so " +
+                                 "send cancel request to vCard parser too.");
+diff --git a/src/com/android/contacts/vcard/ImportVCardActivity.java b/src/com/android/contacts/vcard/ImportVCardActivity.java
+index 38367c40f..71203d4ac 100644
+--- a/src/com/android/contacts/vcard/ImportVCardActivity.java
++++ b/src/com/android/contacts/vcard/ImportVCardActivity.java
+@@ -49,6 +49,7 @@ import com.android.vcard.VCardEntryCounter;
+ import com.android.vcard.VCardParser;
+ import com.android.vcard.VCardParser_V21;
+ import com.android.vcard.VCardParser_V30;
++import com.android.vcard.VCardParser_V40;
+ import com.android.vcard.VCardSourceDetector;
+ import com.android.vcard.exception.VCardException;
+ import com.android.vcard.exception.VCardNestedException;
+@@ -83,6 +84,7 @@ public class ImportVCardActivity extends Activity implements ImportVCardDialogFr
+     /* package */ final static int VCARD_VERSION_AUTO_DETECT = 0;
+     /* package */ final static int VCARD_VERSION_V21 = 1;
+     /* package */ final static int VCARD_VERSION_V30 = 2;
++    /* package */ final static int VCARD_VERSION_V40 = 3;
+ 
+     private static final int REQUEST_OPEN_DOCUMENT = 100;
+ 
+@@ -321,6 +323,7 @@ public class ImportVCardActivity extends Activity implements ImportVCardDialogFr
+             int vcardVersion = VCARD_VERSION_V21;
+             try {
+                 boolean shouldUseV30 = false;
++                boolean shouldUseV40 = false;
+                 InputStream is;
+                 if (data != null) {
+                     is = new ByteArrayInputStream(data);
+@@ -354,7 +357,28 @@ public class ImportVCardActivity extends Activity implements ImportVCardDialogFr
+                         mVCardParser.addInterpreter(detector);
+                         mVCardParser.parse(is);
+                     } catch (VCardVersionException e2) {
+-                        throw new VCardException("vCard with unspported version.");
++                        try {
++                            is.close();
++                        } catch (IOException e) {
++                        }
++
++                        shouldUseV30 = false;
++                        shouldUseV40 = true;
++                        if (data != null) {
++                            is = new ByteArrayInputStream(data);
++                        } else {
++                            is = resolver.openInputStream(localDataUri);
++                        }
++                        mVCardParser = new VCardParser_V40();
++                        try {
++                            counter = new VCardEntryCounter();
++                            detector = new VCardSourceDetector();
++                            mVCardParser.addInterpreter(counter);
++                            mVCardParser.addInterpreter(detector);
++                            mVCardParser.parse(is);
++                        } catch (VCardVersionException e3) {
++                            throw new VCardException("vCard with unspported version.");
++                        }
+                     }
+                 } finally {
+                     if (is != null) {
+@@ -365,7 +389,13 @@ public class ImportVCardActivity extends Activity implements ImportVCardDialogFr
+                     }
+                 }
+ 
+-                vcardVersion = shouldUseV30 ? VCARD_VERSION_V30 : VCARD_VERSION_V21;
++                if (shouldUseV30) {
++                    vcardVersion = VCARD_VERSION_V30;
++                } else if (shouldUseV40) {
++                    vcardVersion = VCARD_VERSION_V40;
++                } else {
++                    vcardVersion = VCARD_VERSION_V21;
++                }
+             } catch (VCardNestedException e) {
+                 Log.w(LOG_TAG, "Nested Exception is found (it may be false-positive).");
+                 // Go through without throwing the Exception, as we may be able to detect the
+diff --git a/src/com/android/contacts/vcard/NfcImportVCardActivity.java b/src/com/android/contacts/vcard/NfcImportVCardActivity.java
+index 88fa76035..f41e56446 100644
+--- a/src/com/android/contacts/vcard/NfcImportVCardActivity.java
++++ b/src/com/android/contacts/vcard/NfcImportVCardActivity.java
+@@ -46,6 +46,7 @@ import com.android.vcard.VCardEntryCounter;
+ import com.android.vcard.VCardParser;
+ import com.android.vcard.VCardParser_V21;
+ import com.android.vcard.VCardParser_V30;
++import com.android.vcard.VCardParser_V40;
+ import com.android.vcard.VCardSourceDetector;
+ import com.android.vcard.exception.VCardException;
+ import com.android.vcard.exception.VCardNestedException;
+@@ -126,9 +127,20 @@ public class NfcImportVCardActivity extends Activity implements ServiceConnectio
+                     parser.addInterpreter(detector);
+                     parser.parse(is);
+                 } catch (VCardVersionException e2) {
+-                    FeedbackHelper.sendFeedback(this, TAG, "vcard with unsupported version", e2);
+-                    showFailureNotification(R.string.fail_reason_not_supported);
+-                    return null;
++                    is.reset();
++                    vcardVersion = ImportVCardActivity.VCARD_VERSION_V40;
++                    parser = new VCardParser_V40();
++                    try {
++                        counter = new VCardEntryCounter();
++                        detector = new VCardSourceDetector();
++                        parser.addInterpreter(counter);
++                        parser.addInterpreter(detector);
++                        parser.parse(is);
++                    } catch (VCardVersionException e3) {
++                        FeedbackHelper.sendFeedback(this, TAG, "vcard with unsupported version", e2);
++                        showFailureNotification(R.string.fail_reason_not_supported);
++                        return null;
++                    }
+                 }
+             } finally {
+                 try {
+-- 
+2.34.1
+

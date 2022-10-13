@@ -1,0 +1,25 @@
+From 6887bd7867fe0e3239b4a63d810d8274a6d28814 Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Wed, 28 Nov 2018 01:14:54 -0500
+Subject: [PATCH 03/12] enable multi user UI
+
+---
+ core/res/res/values/config.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/res/res/values/config.xml b/core/res/res/values/config.xml
+index 9d2bd84e4f1f..deacf270d948 100644
+--- a/core/res/res/values/config.xml
++++ b/core/res/res/values/config.xml
+@@ -2545,7 +2545,7 @@
+     <integer name="config_userTypePackageWhitelistMode">13</integer> <!-- 1+4+8 -->
+ 
+     <!-- Whether UI for multi user should be shown -->
+-    <bool name="config_enableMultiUserUI">false</bool>
++    <bool name="config_enableMultiUserUI">true</bool>
+ 
+     <!-- Whether the new Auto Selection Network UI should be shown -->
+     <bool name="config_enableNewAutoSelectNetworkUI">false</bool>
+-- 
+2.34.1
+

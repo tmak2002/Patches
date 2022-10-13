@@ -1,0 +1,39 @@
+From 615a3cf92bac625c1d97aa398183cdf06bed99ba Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Sat, 16 May 2020 19:44:32 -0400
+Subject: [PATCH 4/6] raise minimum supported API level to 28
+
+This matches the minimum API level required by the Play Store for both
+new apps and app updates, so this is not an aggressive requirement:
+
+https://developer.android.com/distribute/best-practices/develop/target-sdk
+
+There were various backwards incompatible improvements to privacy and
+security from API 23 to API 28. In particular, API 28 introduced the
+new SELinux sandbox using a per-app-per-profile security level (MLS) to
+provide a unique security domain for each app instance. Previously, MLS
+was used to isolate profiles by using per-profile security levels. The
+finer-grained security levels prevent apps from directly sharing data
+without going through intents, eliminating many common vulnerabilities
+and giving the OS better control over how apps can communicate.
+
+Signed-off-by: anupritaisno1 <www.anuprita804@gmail.com>
+---
+ core/version_defaults.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/version_defaults.mk b/core/version_defaults.mk
+index 1dc676bc2..7fe3be14d 100644
+--- a/core/version_defaults.mk
++++ b/core/version_defaults.mk
+@@ -303,6 +303,6 @@ ifndef PLATFORM_MIN_SUPPORTED_TARGET_SDK_VERSION
+   # Used to set minimum supported target sdk version. Apps targeting sdk
+   # version lower than the set value will result in a warning being shown
+   # when any activity from the app is started.
+-  PLATFORM_MIN_SUPPORTED_TARGET_SDK_VERSION := 23
++  PLATFORM_MIN_SUPPORTED_TARGET_SDK_VERSION := 28
+ endif
+ .KATI_READONLY := PLATFORM_MIN_SUPPORTED_TARGET_SDK_VERSION
+-- 
+2.34.1
+

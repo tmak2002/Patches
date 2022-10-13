@@ -1,0 +1,25 @@
+From 88f3358ded8c8870f7e23877195e56ad586cca9b Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Fri, 23 Nov 2018 04:27:20 -0500
+Subject: [PATCH 1/6] enable ro.control_privapp_permissions=enforce
+
+Signed-off-by: anupritaisno1 <www.anuprita804@gmail.com>
+---
+ core/main.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/core/main.mk b/core/main.mk
+index df803b789..fb13d24d6 100644
+--- a/core/main.mk
++++ b/core/main.mk
+@@ -380,6 +380,7 @@ ifneq (,$(user_variant))
+   # Target is secure in user builds.
+   ADDITIONAL_SYSTEM_PROPERTIES += ro.secure=1
+   ADDITIONAL_SYSTEM_PROPERTIES += security.perf_harden=1
++  ADDITIONAL_SYSTEM_PROPERTIES += ro.control_privapp_permissions=enforce
+ 
+   ifeq ($(user_variant),user)
+     ADDITIONAL_SYSTEM_PROPERTIES += ro.adb.secure=1
+-- 
+2.34.1
+

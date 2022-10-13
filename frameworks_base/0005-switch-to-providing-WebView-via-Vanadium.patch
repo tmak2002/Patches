@@ -1,0 +1,24 @@
+From 62075a8468606889debd289d768866275f1eba70 Mon Sep 17 00:00:00 2001
+From: inthewaves <inthewaves@pm.me>
+Date: Tue, 6 Oct 2020 16:02:25 -0700
+Subject: [PATCH 05/12] switch to providing WebView via Vanadium
+
+---
+ core/res/res/xml/config_webview_packages.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/res/res/xml/config_webview_packages.xml b/core/res/res/xml/config_webview_packages.xml
+index f062b59a008c..1db99d8bc404 100644
+--- a/core/res/res/xml/config_webview_packages.xml
++++ b/core/res/res/xml/config_webview_packages.xml
+@@ -16,6 +16,6 @@
+ 
+ <webviewproviders>
+     <!-- The default WebView implementation -->
+-    <webviewprovider description="Android WebView" packageName="com.android.webview" availableByDefault="true">
++    <webviewprovider description="Vanadium" packageName="app.vanadium.webview" availableByDefault="true">
+     </webviewprovider>
+ </webviewproviders>
+-- 
+2.34.1
+

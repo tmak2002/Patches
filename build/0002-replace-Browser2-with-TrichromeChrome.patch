@@ -1,0 +1,36 @@
+From ef308947fd068b676dea0246abb4dea827ea2e20 Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Mon, 17 Feb 2020 04:21:18 -0500
+Subject: [PATCH 2/6] replace Browser2 with TrichromeChrome
+
+Signed-off-by: anupritaisno1 <www.anuprita804@gmail.com>
+Change-Id: Iaf93e783d3a00b03d0eb40463848c0a59a981c76
+---
+ target/product/handheld_product.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/target/product/handheld_product.mk b/target/product/handheld_product.mk
+index 5c57963b9..2dc5fa68c 100644
+--- a/target/product/handheld_product.mk
++++ b/target/product/handheld_product.mk
+@@ -22,16 +22,15 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/media_product.mk)
+ 
+ # /product packages
+ PRODUCT_PACKAGES += \
+-    Calendar \
+     Camera2 \
+     Contacts \
+     DeskClock \
+     Gallery2 \
+     LatinIME \
+-    Music \
+     OneTimeInitializer \
+     preinstalled-packages-platform-handheld-product.xml \
+     SettingsIntelligence \
++    TrichromeChrome \
+     frameworks-base-overlays
+ 
+ PRODUCT_PACKAGES_DEBUG += \
+-- 
+2.34.1
+

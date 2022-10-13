@@ -1,0 +1,82 @@
+From 07c8a8033d4ec00a3a5c52d066500dd6bcefd776 Mon Sep 17 00:00:00 2001
+From: tmak2002 <tmak2002@mailbox.org>
+Date: Wed, 12 Oct 2022 18:15:05 +0000
+Subject: [PATCH 1/2] remove packages
+
+Change-Id: Ic8edeafe4d059134dc83a40a656631f33536b7fe
+---
+ config/packages.mk | 37 +------------------------------------
+ 1 file changed, 1 insertion(+), 36 deletions(-)
+
+diff --git a/config/packages.mk b/config/packages.mk
+index 164324b..95d669b 100644
+--- a/config/packages.mk
++++ b/config/packages.mk
+@@ -16,9 +16,6 @@
+ # Required packages
+ PRODUCT_PACKAGES += \
+     BluetoothExt \
+-    SimpleCalendar \
+-    DuckDuckGo \
+-    ExactCalculator \
+     LatinIME \
+     Launcher3QuickStep \
+     messaging \
+@@ -26,8 +23,7 @@ PRODUCT_PACKAGES += \
+     Stk \
+     stats \
+     ThemePicker \
+-    ArrowThemesStub \
+-    GameSpace
++    ArrowThemesStub
+ 
+ # SystemUI plugins
+ PRODUCT_PACKAGES += \
+@@ -52,23 +48,6 @@ PRODUCT_PACKAGES += \
+ PRODUCT_PACKAGES += \
+     AndroidBlackThemeOverlay
+ 
+-# Extra tools
+-PRODUCT_PACKAGES += \
+-    7z \
+-    bash \
+-    curl \
+-    getcap \
+-    htop \
+-    lib7z \
+-    nano \
+-    pigz \
+-    powertop \
+-    setcap \
+-    unrar \
+-    unzip \
+-    vim \
+-    zip
+-
+ PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
+     system/bin/curl \
+     system/bin/getcap \
+@@ -92,20 +71,6 @@ PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
+     system/%/libfuse-lite.so \
+     system/%/libntfs-3g.so
+ 
+-# Openssh
+-PRODUCT_PACKAGES += \
+-    scp \
+-    sftp \
+-    ssh \
+-    sshd \
+-    sshd_config \
+-    ssh-keygen \
+-    start-ssh
+-
+-# rsync
+-PRODUCT_PACKAGES += \
+-    rsync
+-
+ # These packages are excluded from user builds
+ PRODUCT_PACKAGES_DEBUG += \
+     procmem
+-- 
+2.34.1
+

@@ -1,0 +1,33 @@
+From b623f330ace6a2f21bdb8b495e8439f6af7a3ed4 Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Mon, 28 Dec 2020 20:57:14 -0500
+Subject: [PATCH 3/3] update unused hard-wired fallback URLs
+
+---
+ src/android/net/util/NetworkStackUtils.java | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/android/net/util/NetworkStackUtils.java b/src/android/net/util/NetworkStackUtils.java
+index 81d0c08b..9405aede 100755
+--- a/src/android/net/util/NetworkStackUtils.java
++++ b/src/android/net/util/NetworkStackUtils.java
+@@ -165,14 +165,14 @@ public class NetworkStackUtils {
+      * The default list of HTTP URLs to use for detecting captive portals.
+      */
+     public static final String[] DEFAULT_CAPTIVE_PORTAL_HTTP_URLS =
+-            new String [] {"http://connectivitycheck.gstatic.com/generate_204"};
++            new String [] {"http://connectivitycheck.grapheneos.network/generate_204"};
+ 
+     /**
+      * The default list of HTTPS URLs for network validation, to use for confirming internet
+      * connectivity.
+      */
+     public static final String[] DEFAULT_CAPTIVE_PORTAL_HTTPS_URLS =
+-            new String [] {"https://www.google.com/generate_204"};
++            new String [] {"https://connectivitycheck.grapheneos.network/generate_204"};
+ 
+     /**
+      * @deprecated Considering boolean experiment flag is likely to cause misconfiguration
+-- 
+2.34.1
+
